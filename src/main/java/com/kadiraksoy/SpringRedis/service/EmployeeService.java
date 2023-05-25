@@ -3,6 +3,7 @@ package com.kadiraksoy.SpringRedis.service;
 
 import com.kadiraksoy.SpringRedis.dto.EmployeeDto;
 import com.kadiraksoy.SpringRedis.dto.converter.Converter;
+import com.kadiraksoy.SpringRedis.exception.EmployeeExitsException;
 import com.kadiraksoy.SpringRedis.model.Employee;
 import com.kadiraksoy.SpringRedis.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
@@ -37,14 +38,19 @@ public class EmployeeService {
     }
 
     public void save(EmployeeDto employeeDto) {
-        Employee employee = new Employee();
-        employee.setId(employeeDto.getId());
-        employee.setFirstName(employeeDto.getFirstName());
-        employee.setLastName(employeeDto.getLastName());
-        employee.setPhone(employeeDto.getPhone());
-        employee.setEmail(employeeDto.getEmail());
+        if (checkIfEmployeeExists(employeeDto.getId())){
+            throw new EmployeeExitsException("Employee already exits with id:" + employeeDto.getId());
+        }else {
+            Employee employee = new Employee();
+            employee.setId(employeeDto.getId());
+            employee.setFirstName(employeeDto.getFirstName());
+            employee.setLastName(employeeDto.getLastName());
+            employee.setPhone(employeeDto.getPhone());
+            employee.setEmail(employeeDto.getEmail());
 
-        employeeRepository.save(employee);
+            employeeRepository.save(employee);
+        }
+
     }
     public EmployeeDto update(Long id, EmployeeDto employeeDto){
         Optional<Employee> optionalEmployee = employeeRepository.findById(id);
@@ -67,6 +73,8 @@ public class EmployeeService {
         }
     }
 
-
+    public boolean checkIfEmployeeExists(Long id) {
+        return employeeRepository.existsById(id);
+    }
 
 }

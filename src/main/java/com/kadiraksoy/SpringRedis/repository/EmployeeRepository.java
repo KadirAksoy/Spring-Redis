@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EmployeeRepository extends CrudRepository<Employee,Long> {
+
+    boolean existsById(Long id);
 }
