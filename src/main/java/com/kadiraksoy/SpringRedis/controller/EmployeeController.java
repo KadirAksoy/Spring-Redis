@@ -4,6 +4,7 @@ import com.kadiraksoy.SpringRedis.dto.EmployeeDto;
 import com.kadiraksoy.SpringRedis.service.EmployeeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
@@ -34,11 +35,25 @@ public class EmployeeController {
         return employeeService.findById(id);
     }
 
-    @CachePut(value = "employees", key = "#employee.id")
+    @CachePut(value = "employees", key = "#employeeDto.id")
     @PostMapping("/save")
     public EmployeeDto saveEmployee(@RequestBody EmployeeDto employeeDto) {
         LOG.info("Saving Employee.");
         employeeService.save(employeeDto);
         return employeeDto;
+    }
+
+    @CachePut(value = "employees", key = "#employeeDto.id")
+    @PutMapping("/update/{id}")
+    public EmployeeDto updateEmployee(@RequestBody EmployeeDto employeeDto,@PathVariable Long id) {
+        LOG.info("Updating Employee with id {}", id);
+        employeeService.update(id,employeeDto);
+        return employeeDto;
+    }
+    @CacheEvict(value = "employees", allEntries=true)
+    @DeleteMapping("delete/{id}")
+    public void deleteEmployeeByID(@PathVariable Long id) {
+        LOG.info("Deleting Employee with id {}", id);
+        employeeService.deleteEmployeeByID(id);
     }
 }
