@@ -1,7 +1,7 @@
 # Spring-Redis
 Basic redis project with spring boot
 
-![redis](https://github.com/KadirAksoy/Spring-Redis/assets/90133005/74c9bc18-3efc-4a9e-ae30-9709b7af93d6)
+![redis](https://github.com/KadirAksoy/Spring-Redis/png/90133005/redis)
 
 
 <br>Redis is an open-source, in-memory data structure store that can be used as a database, cache, or message broker. It is designed to be fast, scalable, and reliable.
